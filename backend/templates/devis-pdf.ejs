@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Devis</title>
+  <style>
+    @page { margin: 15mm; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10pt;
+      color: #333333;
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2px solid #000000;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .company-details {
+      width: 50%;
+    }
+    .company-name {
+      font-size: 24pt;
+      font-weight: bold;
+      color: #000000;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+    .company-info {
+      font-size: 9pt;
+      color: #555555;
+    }
+    .quote-details {
+      width: 40%;
+      text-align: right;
+    }
+    .quote-title {
+      font-size: 28pt;
+      font-weight: bold;
+      color: #000000;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+    .quote-meta table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .quote-meta th {
+      text-align: right;
+      padding: 3px 10px 3px 0;
+      color: #666666;
+      font-weight: normal;
+    }
+    .quote-meta td {
+      text-align: right;
+      font-weight: bold;
+    }
+
+    .client-section {
+      margin-bottom: 40px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border: 1px solid #dddddd;
+    }
+    .client-section h3 {
+      margin-top: 0;
+      font-size: 10pt;
+      color: #666666;
+      text-transform: uppercase;
+      border-bottom: 1px solid #cccccc;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+    }
+    .client-details strong {
+      font-size: 12pt;
+      display: block;
+      margin-bottom: 5px;
+      color: #000000;
+    }
+
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    .items-table th {
+      background-color: #eeeeee;
+      border-top: 1px solid #000000;
+      border-bottom: 1px solid #000000;
+      padding: 10px;
+      text-align: left;
+      font-size: 9pt;
+      text-transform: uppercase;
+    }
+    .items-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #dddddd;
+      vertical-align: top;
+    }
+    .items-table th.right, .items-table td.right {
+      text-align: right;
+    }
+    .item-name {
+      font-weight: bold;
+      color: #000000;
+    }
+    .item-desc {
+      font-size: 8pt;
+      color: #666666;
+      margin-top: 4px;
+    }
+
+    .totals-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 40px;
+    }
+    .totals-table {
+      width: 350px;
+      border-collapse: collapse;
+    }
+    .totals-table td {
+      padding: 8px 10px;
+      text-align: right;
+    }
+    .totals-table td.label {
+      font-weight: bold;
+      color: #666666;
+    }
+    .totals-table tr.grand-total td {
+      border-top: 2px solid #000000;
+      font-size: 14pt;
+      font-weight: bold;
+      color: #000000;
+      padding-top: 12px;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      border-top: 1px solid #cccccc;
+      padding-top: 10px;
+      font-size: 8pt;
+      color: #888888;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="company-details">
+      <!-- Remplacer par l'URL ou la balise img de votre logo réel -->
+      <div class="company-name"><%= companyName || 'Bedouielec' %></div>
+      <div class="company-info">
+        Spécialiste Transformateurs HTA/BT<br>
+        Rue Omar el Mokhtar, Teboulba 5080<br>
+        Monastir, Tunisie<br>
+        Tél: +216 29 493 780<br>
+        Email: support@bedouielec.com
+      </div>
+    </div>
+    <div class="quote-details">
+      <div class="quote-title">DEVIS</div>
+      <div class="quote-meta">
+        <table>
+          <tr>
+            <th>Date:</th>
+            <td><%= new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></td>
+          </tr>
+          <tr>
+            <th>Référence:</th>
+            <td>DEV-<%= Date.now().toString().slice(-6) %></td>
+          </tr>
+          <tr>
+            <th>Validité:</th>
+            <td>30 jours</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="client-section">
+    <h3>Client</h3>
+    <div class="client-details">
+      <strong><%= name %></strong>
+      <% if (company) { %><div><%= company %></div><% } %>
+      <div><%= email %></div>
+      <div><%= phone %></div>
+    </div>
+  </div>
+
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th style="width: 5%;">#</th>
+        <th style="width: 50%;">Désignation</th>
+        <th style="width: 15%;" class="right">Qté</th>
+        <th style="width: 15%;" class="right">P.U. HT (TND)</th>
+        <th style="width: 15%;" class="right">Total HT (TND)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (products && products.length > 0) { %>
+        <% products.forEach(function(item, index) { %>
+          <% 
+            var prodName = item?.product?.name || item?.name || 'Produit';
+            var prodDesc = item?.product?.description || '';
+            var prodPrice = Number(item?.product?.price || item?.price) || 0;
+            var qty = Number(item?.quantity) || 1;
+            var lineTotal = Number(item?.totalPrice) || (prodPrice * qty);
+          %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td>
+              <div class="item-name"><%= prodName %></div>
+              <% if (prodDesc) { %>
+                <div class="item-desc"><%= prodDesc.substring(0, 100) %><%= prodDesc.length > 100 ? '...' : '' %></div>
+              <% } %>
+            </td>
+            <td class="right"><%= qty %></td>
+            <td class="right"><%= prodPrice.toLocaleString('fr-FR', {minimumFractionDigits: 2}) %></td>
+            <td class="right"><%= lineTotal.toLocaleString('fr-FR', {minimumFractionDigits: 2}) %></td>
+          </tr>
+        <% }); %>
+      <% } else { %>
+        <tr>
+          <td colspan="5" style="text-align: center; color: #888; padding: 20px;">Aucun produit</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+
+  <div class="totals-wrapper">
+    <table class="totals-table">
+      <tr>
+        <td class="label">Total HT:</td>
+        <td><%= (totalPrice || 0).toLocaleString('fr-FR', {minimumFractionDigits: 2}) %> TND</td>
+      </tr>
+      <tr>
+        <td class="label">TVA (19%):</td>
+        <td><%= Math.round((totalPrice || 0) * 0.19).toLocaleString('fr-FR', {minimumFractionDigits: 2}) %> TND</td>
+      </tr>
+      <tr class="grand-total">
+        <td class="label">Total TTC:</td>
+        <td><%= Math.round((totalPrice || 0) * 1.19).toLocaleString('fr-FR', {minimumFractionDigits: 2}) %> TND</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    <%= companyName || 'Bedouielec' %> • Matricule Fiscal: XXXXXXXX • RIB: XX XXX XXXX XXXX XXXX XX<br>
+    Ce devis est soumis à nos conditions générales de vente.
+  </div>
+</body>
+</html>

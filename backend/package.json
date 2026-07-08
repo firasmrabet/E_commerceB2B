@@ -1,0 +1,37 @@
+
+
+
+
+{
+  "name": "bedoui-backend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "server": "node server.js",
+    "test:verify-update": "node test/verify-update-product.mjs",
+    "build": "echo 'No build step required'"
+  },
+  "dependencies": {
+    "@sparticuz/chromium": "^119.0.0",
+    "@supabase/supabase-js": "^2.39.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^8.2.0",
+    "nodemailer": "^7.0.5",
+    "playwright-core": "^1.43.0",
+    "puppeteer": "^25.3.0",
+    "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}

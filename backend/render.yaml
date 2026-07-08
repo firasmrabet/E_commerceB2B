@@ -1,0 +1,67 @@
+services:
+  - type: web
+    name: bedoui-backend
+    env: docker
+    region: frankfurt
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    dockerCommand: node server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PDF_STORAGE_PATH
+        value: /app/generated-pdfs
+      - key: PDF_TEMPLATE_PATH
+        value: /app/templates/devis-pdf.ejs
+        
+      # Variables SMTP
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        value: firassmrabett111@gmail.com
+      - key: SMTP_PASS
+        sync: false  # Cette valeur sera configurée manuellement dans l'interface Render
+      - key: RECEIVER_EMAIL
+        value: marwenyoussef2017@gmail.com,firassmrabett111@gmail.com  # Emails séparés par des virgules
+        
+      # Variables de sécurité
+      - key: API_KEY
+        value: fede4f36462899e544b0b541a1e7961f5070079d4ffbe9ea8a08d2d7ba2cc403
+      - key: DOWNLOAD_TOKEN_SECRET
+        value: f66ed78a6d0026aa81f35d7f440eb25484f7f0c559ccd95eede3d594595fb419
+      - key: ENCRYPTION_KEY
+        value: 9d0202c35d5b66311b5668fdc4ea898e10472cfb036895935dfe641ff8758279
+        
+      # Frontend Origin
+      - key: FRONTEND_ORIGIN
+        value: https://bedoui-frontend-k7h9.onrender.com
+        
+      # Company Information
+      - key: COMPANY_NAME
+        value: "Bedouielec"
+      - key: COMPANY_SIRET
+        value: "12345678900001"
+      - key: COMPANY_APE
+        value: "4321A"
+      - key: COMPANY_TVA
+        value: "FR12345678900"
+      - key: COMPANY_ADDRESS
+        value: "Rue Example, 1234 Ville"
+      - key: COMPANY_PHONE
+        value: "+216 12 345 678"
+      - key: COMPANY_EMAIL
+        value: "firassmrabett111@gmail.com"
+      - key: COMPANY_SITE
+        value: "https://bedouistoreproducts.vercel.app"
+      - key: COMPANY_LOGO_URL
+        value: "https://bedouistoreproducts.vercel.app/logo.png"
+      - key: TVA_RATE
+        value: "0.20"
+        
+    disk:
+      name: pdf-storage
+      mountPath: /app/generated-pdfs
+      sizeGB: 1
